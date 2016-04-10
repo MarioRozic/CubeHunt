@@ -12,19 +12,16 @@
 </head>
 <body>
     <canvas id="mainCanvas" width="1024" height="720" style="border:1px solid #000000"></canvas>
-    <img id="img" style="display:none;" src="http://www.mrwallpaper.com/wallpapers/space-purple-blue-nebula.jpg"/>
 
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
 <script>
 var canvas = document.getElementById("mainCanvas").getContext("2d");
-var img = document.getElementById("img");
 var socket = io();
 var playerID;
 
 socket.on("newPositions",function(data){
     canvas.clearRect(0,0,1024,720);
-    //canvas.drawImage(img,0,0,800,600);
     for(var i = 0; i < data.player.length; i++){
         canvas.save();
         var color = data.player[i].color;
@@ -58,8 +55,6 @@ socket.on("newPositions",function(data){
         canvas.stroke();
         canvas.fill();
     }
-
-    
 });
 
 socket.on("getPlayerID",function(data){
@@ -103,7 +98,6 @@ document.onkeyup = function(event){
     else if(event.keyCode === 87)
         socket.emit("keyPress",{inputID:"Up",state:false});
 
-
 }
 
 document.onmousemove = function(mouse){
@@ -121,13 +115,7 @@ document.oncontextmenu = function(mouse){
     mouse.preventDefault();
 
 }
-
-
-
 </script>
-
-
-  
 </body>
 </html>
 
