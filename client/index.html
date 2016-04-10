@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cube Hunt</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mainCanvas" width="1024" height="720" style="border:1px solid #000000"></canvas>
+    <img id="img" style="display:none;" src="http://www.mrwallpaper.com/wallpapers/space-purple-blue-nebula.jpg"/>
+
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+
+<script>
+var canvas = document.getElementById("mainCanvas").getContext("2d");
+var img = document.getElementById("img");
+var socket = io();
+var playerID;
+
+socket.on("newPositions",function(data){
+    canvas.clearRect(0,0,1024,720);
+    //canvas.drawImage(img,0,0,800,600);
+    for(var i = 0; i < data.player.length; i++){
+        canvas.save();
+        var color = data.player[i].color;
+        canvas.fillStyle = color;
+        canvas.fillRect(data.player[i].x - data.player[i].width/2,data.player[i].y - data.player[i].height/2,data.player[i].width,data.player[i].height);
+        canvas.restore();
+        if(data.player[i].id == playerID){
+            if(data.player[i].hp <= 0){
+                if(confirm("YOU LOSE!!") == true){
+                    location.reload();
+                }else{
+                    location.reload();
+                }
+            }
+            makeHpBar(data.player[i].hp,"left",color);
+        }else{
+            if(data.player[i].hp <= 0)
+                if(confirm("YOU WIN!!") == true){
+                    location.reload();
+                }else{
+                    location.reload();
+                }
+            makeHpBar(data.player[i].hp,"right",color);
+        }
+    }
+    canvas.fillStyle = "#f1c40f";
+    for(var i = 0; i < data.bullet.length; i++){
+        
+        canvas.beginPath();
+        canvas.arc(data.bullet[i].x,data.bullet[i].y,5,0,5*Math.PI);
+        canvas.stroke();
+        canvas.fill();
+    }
+
+    
+});
+
+socket.on("getPlayerID",function(data){
+    playerID = data;
+    console.log(playerID);
+});
+
+makeHpBar = function(data,side,color){
+
+    if(side == "left"){
+        canvas.fillStyle = "#ecf0f1";
+        canvas.fillRect(18,688,379,14);
+        canvas.fillStyle = color;
+        canvas.fillRect(20,690,data*15,10);
+    }else{
+        canvas.fillStyle = "#ecf0f1";
+        canvas.fillRect(630,688,379,14);
+        canvas.fillStyle = color;
+        canvas.fillRect(632,690,data*15,10);
+    }
+}
+document.onkeydown = function(event){
+    if(event.keyCode === 68)
+        socket.emit("keyPress",{inputID:"Right",state:true});
+    else if(event.keyCode === 83)
+        socket.emit("keyPress",{inputID:"Down",state:true});
+    else if(event.keyCode === 65)
+        socket.emit("keyPress",{inputID:"Left",state:true});
+    else if(event.keyCode === 87)
+        socket.emit("keyPress",{inputID:"Up",state:true});
+}
+
+document.onkeyup = function(event){
+
+    if(event.keyCode === 68)
+        socket.emit("keyPress",{inputID:"Right",state:false});
+    else if(event.keyCode === 83)
+        socket.emit("keyPress",{inputID:"Down",state:false});
+    else if(event.keyCode === 65)
+        socket.emit("keyPress",{inputID:"Left",state:false});
+    else if(event.keyCode === 87)
+        socket.emit("keyPress",{inputID:"Up",state:false});
+
+
+}
+
+document.onmousemove = function(mouse){
+    var mouseX = mouse.clientX - 8;
+    var mouseY = mouse.clientY - 8;
+    socket.emit("mousePosition",{mX: mouseX,mY: mouseY});
+}
+document.onclick = function(mouse){
+    socket.emit("shoot",{test: "test"});
+}
+
+document.oncontextmenu = function(mouse){
+
+    socket.emit("specialShoot",{test: "test"});
+    mouse.preventDefault();
+
+}
+
+
+
+</script>
+
+
+  
+</body>
+</html>
+
+
+
+

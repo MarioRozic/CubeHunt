@@ -1,0 +1,22 @@
+{
+  "name": "cubehunt",
+  "version": "1.0.0",
+  "description": "game with socket.io and node.js",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.13.4",
+    "socket.io": "^1.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "html5",
+    "node.js",
+    "socket.io",
+    "express"
+  ],
+  "author": "Mario Rozic",
+  "license": "MIT"
+}
