@@ -3,16 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Cube Hunt</title>
-    <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+    
+	<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="client/style.css">
 </head>
 <body>
-    <canvas id="mainCanvas" width="1024" height="720" style="border:1px solid #000000"></canvas>
+    <!--<canvas id="mainCanvas" width="1024" height="720" style="border:1px solid #000000"></canvas>-->
 
+    <div class="container">
+	<div class="poruka"><span>Cube Hunt <span id="beta">[BETA]</span></span></div>
+	<canvas id = "mainCanvas" width="1024" height="720"></canvas>
+	
+	<div class="copyright">
+		Cube Hunt { Mario Rozic @ 11111100000 } All rights reserved.
+	</div>
+	</div>
+<script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
 <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
 <script>
@@ -100,11 +110,15 @@ document.onkeyup = function(event){
 
 }
 
-document.onmousemove = function(mouse){
-    var mouseX = mouse.clientX - 8;
-    var mouseY = mouse.clientY - 8;
-    socket.emit("mousePosition",{mX: mouseX,mY: mouseY});
+
+
+function emitPosition(e) {
+    var x = e.offsetX;
+    var y = e.offsetY;
+    console.log(x + ' - ' + y);
+    socket.emit("mousePosition",{mX: x,mY: y});
 }
+
 document.onclick = function(mouse){
     socket.emit("shoot",{test: "test"});
 }
@@ -115,6 +129,13 @@ document.oncontextmenu = function(mouse){
     mouse.preventDefault();
 
 }
+
+$(document).ready(function() {
+
+    $("#mainCanvas").bind( "mousemove", function(e){ emitPosition(e); } );
+
+});
+
 </script>
 </body>
 </html>
