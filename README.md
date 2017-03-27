@@ -12,7 +12,7 @@ This is my 1st game made with Node.js and socket.io
 # ToDo List
 	
 	1. Add Login and Register for Users 
-	2. Maybe somw win-lose streak 
+	2. Maybe some win-lose streak 
 	3. Add rooms so you can send link to your friend and play 1 on 1 (right now it is not even limited for 2 players :P )
 	4. ...
 
